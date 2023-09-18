@@ -31,7 +31,7 @@ Users should be able to:
 
 ### Links
 
-- Live Site URL: [Interactive Comment Section]([https://your-solution-url.com](https://nimble-longma-cdbb5b.netlify.app/))
+- Live Site URL: [Interactive Comment Section](https://nimble-longma-cdbb5b.netlify.app/)
 
 ## My process
 
