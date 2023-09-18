@@ -1,0 +1,58 @@
+@use "../Utils/variables" as var;
+@use "../Utils/functions" as func;
+
+// hide the elements and make screen-reader only
+// read the content of the element
+.visually-hidden {
+  border: 0;
+  clip: rect(0 0 0 0);
+  height: 1px;
+  margin: -1px;
+  overflow: hidden;
+  padding: 0;
+  position: absolute;
+  width: 1px;
+}
+
+li,
+ul,
+ol {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+}
+
+button,
+a {
+  background: 0;
+  border: none;
+  font: inherit;
+  color: inherit;
+  cursor: pointer;
+  text-decoration: none;
+}
+
+textarea,
+textarea:focus,
+textarea:hover {
+  border-style: none;
+  overflow: auto;
+  resize: none;
+  font: inherit;
+}
+
+button:hover {
+  opacity: 0.5;
+}
+
+.wrapper {
+  width: min(45em, 100% - 2em);
+  margin-inline: auto;
+  margin-block: 2em;
+}
+
+@media (min-width: var.$bp-medium) {
+  .wrapper {
+    margin-block: 5em;
+  }
+}

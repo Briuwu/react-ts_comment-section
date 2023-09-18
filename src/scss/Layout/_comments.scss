@@ -1,0 +1,152 @@
+@use "../Utils/variables" as var;
+@use "../Utils/functions" as func;
+
+.comments {
+  margin-block: 1em;
+  display: grid;
+  gap: 1em;
+
+  &__each {
+    background-color: var.$white;
+    padding: 1em;
+    border-radius: 0.5em;
+    display: grid;
+    gap: 1em;
+    position: relative;
+  }
+
+  &__profile {
+    display: flex;
+    align-items: center;
+    gap: 0.5em;
+    color: var.$dark-blue;
+
+    .username {
+      font-weight: var.$fw-500;
+
+      span {
+        background-color: var.$moderate-blue;
+        color: var.$white;
+        padding: 0.125em 0.5em;
+        border-radius: 0.25em;
+        font-size: func.rem(14);
+        margin-left: 0.25em;
+      }
+    }
+
+    .date {
+      color: var.$grayish-blue;
+    }
+
+    img {
+      width: 2em;
+    }
+  }
+
+  &__comment {
+    color: var.$grayish-blue;
+
+    span {
+      color: var.$moderate-blue;
+      font-weight: var.$fw-500;
+    }
+  }
+
+  &__votes {
+    background-color: var.$very-light-gray;
+    justify-self: start;
+    border-radius: 0.75em;
+    color: var.$moderate-blue;
+    font-weight: var.$fw-500;
+
+    display: flex;
+    align-items: center;
+
+    button {
+      display: grid;
+      place-items: center;
+      padding: 1em;
+
+      &:hover {
+        opacity: 1;
+        filter: brightness(70%);
+      }
+
+      &.active {
+        filter: invert(38%) sepia(31%) saturate(1062%) hue-rotate(200deg)
+          brightness(91%) contrast(99%);
+      }
+    }
+  }
+
+  &__action {
+    position: absolute;
+    right: 0;
+    bottom: 0;
+    padding-right: 1em;
+    padding-bottom: 1.5em;
+    display: flex;
+    gap: 0.5em;
+
+    color: var.$moderate-blue;
+    font-weight: var.$fw-500;
+
+    button {
+      display: flex;
+      align-items: center;
+      gap: 0.25em;
+    }
+
+    .delete {
+      color: var.$soft-red;
+    }
+  }
+
+  &__reply {
+    margin-top: 1em;
+    border-left: 2px solid var.$light-gray;
+    padding-left: 1em;
+    display: grid;
+    gap: 1em;
+  }
+}
+
+@media (min-width: var.$bp-medium) {
+  .comments {
+    &__reply {
+      margin-left: 2em;
+      padding-left: 2em;
+    }
+
+    &__each {
+      grid-template-columns: auto 1fr;
+      padding: 2em 1.5em;
+    }
+
+    &__votes {
+      grid-row: 1 / -3;
+      place-self: start;
+      flex-direction: column;
+    }
+
+    &__action {
+      top: 0;
+      align-items: start;
+      padding: 2.5em 2em;
+      z-index: 1;
+    }
+
+    &__comment {
+      max-width: 650px;
+    }
+  }
+}
+
+.form__edit {
+  display: grid;
+  gap: 1em;
+
+  button {
+    justify-self: end;
+  }
+}

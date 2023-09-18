@@ -1,0 +1,81 @@
+@use "../Utils/variables" as var;
+@use "../Utils/functions" as func;
+
+.textarea {
+  outline: 2px solid var.$light-gray;
+  padding: 1em;
+  resize: none;
+  border-radius: 0.25em;
+
+  &:focus {
+    outline-color: var.$moderate-blue;
+  }
+}
+
+button:disabled {
+  opacity: 0.5;
+}
+
+form {
+  z-index: 2;
+}
+
+.input {
+  display: grid;
+  gap: 1em;
+  grid-template-columns: 1fr auto;
+  background-color: var.$white;
+  padding: 1em;
+  border-radius: 0.5em;
+  // position: sticky;
+  // bottom: 1em;
+  // box-shadow: rgba(149, 157, 165, 0.2) 0px 8px 24px;
+
+  img {
+    width: 2em;
+    align-self: center;
+  }
+
+  textarea {
+    grid-column: 1 / -1;
+    grid-row: 1;
+  }
+}
+
+.btn {
+  background-color: var.$moderate-blue;
+  color: var.$white;
+  width: 100px;
+  padding-block: 0.75em;
+  border-radius: 0.5em;
+  text-transform: uppercase;
+  font-weight: var.$fw-500;
+}
+.reply {
+  margin-top: 1em;
+}
+
+@media (min-width: var.$bp-medium) {
+  .input {
+    grid-template-columns: auto 1fr auto;
+    padding: 2em;
+
+    img {
+      grid-column: 1 / 2;
+      grid-row: 1;
+      align-self: start;
+      width: 3em;
+    }
+
+    textarea {
+      grid-column: 2 / 3;
+      grid-row: 1;
+    }
+
+    button {
+      grid-column: 3 / -1;
+      grid-row: 1;
+      align-self: start;
+    }
+  }
+}
