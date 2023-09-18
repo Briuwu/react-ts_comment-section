@@ -5,6 +5,7 @@ function App() {
   return (
     <>
       <main className="wrapper">
+        <h1 className="visually-hidden">Comments</h1>
         <AllComments />
         <AddComment />
       </main>
