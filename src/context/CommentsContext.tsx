@@ -30,7 +30,10 @@ type ACTIONTYPE =
   | { type: "downvote"; id: number };
 
 const useCommentsProvider = () => {
-  const [state, dispatch] = useReducer(reducer, comments);
+  const initialState = localStorage.getItem("comments")
+    ? JSON.parse(localStorage.getItem("comments")!)
+    : comments;
+  const [state, dispatch] = useReducer(reducer, initialState);
 
   const handleVote = (typeOfVote: "upvote" | "downvote", id: number) => {
     if (typeOfVote === "upvote") {
@@ -73,51 +76,65 @@ const useCommentsProvider = () => {
 };
 
 const reducer = (state: CommentsType[], action: ACTIONTYPE) => {
+  const updateLocalStorage = (comments: CommentsType[]) => {
+    localStorage.setItem("comments", JSON.stringify(comments));
+  };
+
   switch (action.type) {
     case "add": {
-      return [
-        ...state,
-        {
-          id: state.length + 1,
-          content: action.content,
-          createdAt: formatDateToRelative(new Date()),
-          score: 0,
-          user: action.user,
-          parentId: null,
-          replyingTo: null,
-          voted: 0,
-        },
-      ];
+      const newComment = {
+        id: state.length + 1,
+        content: action.content,
+        createdAt: formatDateToRelative(new Date()),
+        score: 0,
+        user: action.user,
+        parentId: null,
+        replyingTo: null,
+        voted: 0,
+      };
+
+      const newState = [...state, newComment];
+      updateLocalStorage(newState);
+
+      return newState;
     }
     case "remove": {
-      return state.filter((item) => item.id !== action.id);
+      const newState = state.filter((item) => item.id !== action.id);
+      updateLocalStorage(newState);
+
+      return newState;
     }
     case "reply": {
-      return [
-        ...state,
-        {
-          id: state.length + 1,
-          content: action.content,
-          createdAt: formatDateToRelative(new Date()),
-          score: 0,
-          user: action.user,
-          parentId: action.parentId,
-          replyingTo: action.replyingTo,
-          voted: 0,
-        },
-      ];
+      const newComment = {
+        id: state.length + 1,
+        content: action.content,
+        createdAt: formatDateToRelative(new Date()),
+        score: 0,
+        user: action.user,
+        parentId: action.parentId,
+        replyingTo: action.replyingTo,
+        voted: 0,
+      };
+
+      const newState = [...state, newComment];
+      updateLocalStorage(newState);
+
+      return newState;
     }
     case "edit": {
-      return state.map((item) => {
+      const newState = state.map((item) => {
         if (item.id === action.id) {
           return { ...item, content: action.content };
         } else {
           return item;
         }
       });
+      updateLocalStorage(newState);
+
+      return newState;
     }
     case "upvote": {
-      return state.map((item) => {
+      const newState = state.map((item) => {
         if (item.id === action.id) {
           // If the item is already upvoted, remove the upvote and decrease the score by 1
           if (item.voted === 1) {
@@ -135,9 +152,12 @@ const reducer = (state: CommentsType[], action: ACTIONTYPE) => {
           return item;
         }
       });
+      updateLocalStorage(newState);
+
+      return newState;
     }
     case "downvote": {
-      return state.map((item) => {
+      const newState = state.map((item) => {
         if (item.id === action.id) {
           if (item.voted === -1) {
             // If the item is already downvoted, set voted to 0 and increase the score by 1
@@ -154,6 +174,9 @@ const reducer = (state: CommentsType[], action: ACTIONTYPE) => {
           return item;
         }
       });
+      updateLocalStorage(newState);
+
+      return newState;
     }
   }
 };
