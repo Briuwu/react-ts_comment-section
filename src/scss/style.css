@@ -289,6 +289,9 @@ form {
   background-color: hsl(0, 0%, 100%);
   padding: 1em;
   border-radius: 0.5em;
+  position: sticky;
+  bottom: 1em;
+  box-shadow: rgba(149, 157, 165, 0.2) 0px 8px 24px;
 }
 .input img {
   width: 2em;
