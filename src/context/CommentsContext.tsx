@@ -1,4 +1,4 @@
-import { createContext, ReactNode, useReducer } from "react";
+import { createContext, ReactNode, useReducer, useEffect } from "react";
 import { comments, CommentsType } from "../data/data";
 import { formatDateToRelative } from "../utils/DateToRelative";
 import { UserType } from "./UsersContext";
@@ -76,16 +76,14 @@ const useCommentsProvider = () => {
 };
 
 const reducer = (state: CommentsType[], action: ACTIONTYPE) => {
-  const updateLocalStorage = (comments: CommentsType[]) => {
-    localStorage.setItem("comments", JSON.stringify(comments));
-  };
+  const currentDate = new Date();
 
   switch (action.type) {
     case "add": {
       const newComment = {
         id: state.length + 1,
         content: action.content,
-        createdAt: formatDateToRelative(new Date()),
+        createdAt: formatDateToRelative(currentDate),
         score: 0,
         user: action.user,
         parentId: null,
@@ -94,13 +92,11 @@ const reducer = (state: CommentsType[], action: ACTIONTYPE) => {
       };
 
       const newState = [...state, newComment];
-      updateLocalStorage(newState);
 
       return newState;
     }
     case "remove": {
       const newState = state.filter((item) => item.id !== action.id);
-      updateLocalStorage(newState);
 
       return newState;
     }
@@ -108,7 +104,7 @@ const reducer = (state: CommentsType[], action: ACTIONTYPE) => {
       const newComment = {
         id: state.length + 1,
         content: action.content,
-        createdAt: formatDateToRelative(new Date()),
+        createdAt: formatDateToRelative(currentDate),
         score: 0,
         user: action.user,
         parentId: action.parentId,
@@ -117,7 +113,6 @@ const reducer = (state: CommentsType[], action: ACTIONTYPE) => {
       };
 
       const newState = [...state, newComment];
-      updateLocalStorage(newState);
 
       return newState;
     }
@@ -129,7 +124,6 @@ const reducer = (state: CommentsType[], action: ACTIONTYPE) => {
           return item;
         }
       });
-      updateLocalStorage(newState);
 
       return newState;
     }
@@ -152,7 +146,6 @@ const reducer = (state: CommentsType[], action: ACTIONTYPE) => {
           return item;
         }
       });
-      updateLocalStorage(newState);
 
       return newState;
     }
@@ -160,21 +153,16 @@ const reducer = (state: CommentsType[], action: ACTIONTYPE) => {
       const newState = state.map((item) => {
         if (item.id === action.id) {
           if (item.voted === -1) {
-            // If the item is already downvoted, set voted to 0 and increase the score by 1
             return { ...item, voted: 0, score: item.score + 1 };
           } else if (item.voted === 1) {
-            // If the item is upvoted, set voted to -1 and decrease the score by 2
             return { ...item, voted: -1, score: item.score - 2 };
           } else {
-            // If the item is neither upvoted nor downvoted, set voted to -1 and decrease the score by 1
             return { ...item, voted: -1, score: item.score - 1 };
           }
         } else {
-          // If the item is not the one being downvoted, return it as is
           return item;
         }
       });
-      updateLocalStorage(newState);
 
       return newState;
     }
@@ -182,8 +170,14 @@ const reducer = (state: CommentsType[], action: ACTIONTYPE) => {
 };
 
 const CommentsProvider = ({ children }: { children: ReactNode }) => {
+  const { state, ...rest } = useCommentsProvider();
+
+  useEffect(() => {
+    localStorage.setItem("comments", JSON.stringify(state));
+  }, [state]);
+
   return (
-    <CommentsContext.Provider value={useCommentsProvider()}>
+    <CommentsContext.Provider value={{ state, ...rest }}>
       {children}
     </CommentsContext.Provider>
   );
