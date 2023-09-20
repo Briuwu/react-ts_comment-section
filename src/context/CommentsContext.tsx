@@ -5,15 +5,7 @@ import { UserType } from "./UsersContext";
 
 type CommentsContextType = ReturnType<typeof useCommentsProvider>;
 
-export const CommentsContext = createContext<CommentsContextType>({
-  state: comments,
-  dispatch: () => {},
-  handleAddComments: () => {},
-  handleDeleteComment: () => {},
-  handleReplyComment: () => {},
-  handleEditComment: () => {},
-  handleVote: () => {},
-});
+export const CommentsContext = createContext<CommentsContextType | null>(null);
 
 type ACTIONTYPE =
   | { type: "add"; content: string; user: UserType }
